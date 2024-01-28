@@ -1,0 +1,83 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Panier{% endblock %}
+
+{% block body %}
+    <div class="container mt-4">
+        <h2>Votre Panier</h2>
+        {% if cartItems|length > 0 %}
+            <div class="row">
+                <!-- Colonne pour le tableau -->
+                <div class="col-md-8">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>Produit</th>
+                            <th>Titre</th>
+                            <th>Quantité</th>
+                            <th>Prix Unitaire</th>
+                            <th>Total</th>
+                            <th>Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for item in cartItems %}
+                            <tr>
+                                <td><img src="{{ asset('upload/' ~ item.product.image) }}" alt="{{ item.product.nom }}" class="img-fluid" style="width: 50px; height: auto;"></td>
+                                <td>{{ item.product.nom }}</td>
+                                <td>
+                                    <a href="{{ path('decrease_quantity', {'cartItemId': item.id}) }}" class="btn btn-secondary btn-sm">-</a>
+                                    {{ item.quantity }}
+                                    <a href="{{ path('increase_quantity', {'cartItemId': item.id}) }}" class="btn btn-secondary btn-sm">+</a>
+                                </td>
+                                <td>{{ (item.product.prix / 100)|number_format(2, ',', ' ') }} €</td>
+                                <td>{{ ((item.product.prix * item.quantity) / 100)|number_format(2, ',', ' ') }} €</td>
+                                <td>
+                                    <a href="{{ path('remove_from_cart', {'cartItemId': item.id}) }}" class="btn btn-danger btn-sm">Supprimer</a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <!-- Colonne pour le total et le bouton commander -->
+                <div class="col-md-4">
+                    <div class="border p-3">
+                        <h4>Récapitulatif</h4>
+                        <p>Total : <strong>{{ (total / 100)|number_format(2, ',', ' ') }} €</strong></p>
+                        <p>Nombre d'articles : <strong>{{ cartItems|length }}</strong></p>
+
+                        <!-- Nouvelles informations ajoutées -->
+                        <p>Estimation des frais de livraison : <strong>5,00 €</strong></p>
+                        <p>Date estimée de livraison : <strong>{{ 'now'|date_modify('+5 days')|date('d/m/Y') }}</strong></p>
+
+                        <div class="mt-3">
+                            <label for="discount-code">Code de réduction :</label>
+                            <input type="text" id="discount-code" class="form-control mb-2">
+                            <button class="btn btn-success btn-sm">Appliquer</button>
+                        </div>
+
+                        <a href="{{ path('app_order') }}" class="btn btn-primary mt-3">Commander</a>
+                    </div>
+
+                    <!-- Suggestions de produits (facultatif) -->
+                    <div class="mt-3">
+                        <h5>Vous pourriez aussi aimer :</h5>
+                        <ul class="list-unstyled">
+                            <li><a href="#">Produit 1</a></li>
+                            <li><a href="#">Produit 2</a></li>
+                            <li><a href="#">Produit 3</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <p>Votre panier est vide.</p>
+        {% endif %}
+        <div class="row mt-3">
+            <div class="col-md-6">
+                <a href="{{ path('app_products') }}" class="btn btn-secondary">Continuer mes achats</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}

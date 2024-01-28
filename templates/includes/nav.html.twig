@@ -1,0 +1,43 @@
+  <header>
+<nav class="navbar " style="background: 	#F5B7B1 ;>
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">Ressources Formations</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"> </span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarText">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="{{ path('home')}}">home</a>
+        </li>
+           <li class="nav-item">
+         <a class="nav-link active" aria-current="page" href="{{ path('app_espace')}}">Mon compte</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ path('about') }}"> a rpopos de moi</a>
+        </li>
+        {% if  is_granted("ROLE_USER") and not is_granted("ROLE_ADMIN") %} 
+        {{app.user.email}} | <a href="{{ path('app_logout') }}"> Déconnexion</a>
+         {% endif %}
+         {% if  is_granted("ROLE_ADMIN") %} 
+        {{app.user.email}} | <a href="{{ path('app_logout') }}"> Déconnexion</a>
+         {% endif %}
+          <li class="nav-item">
+          <a class="nav-link" href="{{ path('admin') }}"> Admin</a>
+        </li>
+         <li class="nav-item">
+          <a class="nav-link" href="{{ path('app_products') }}">Produits</a>
+        </li>
+         {% if  not  is_granted("ROLE_USER") and not is_granted("ROLE_ADMIN") %} 
+            <li class="nav-item">
+          <a href="{{ path('app_login') }}"> Connexion</a>
+           </li>
+         {% endif %}
+         
+        
+      <span class="navbar-text">
+      </span>
+    </div>
+  </div>
+</nav>
+    </header>

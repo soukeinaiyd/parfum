@@ -1,0 +1,63 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Détails de la commande{% endblock %}
+
+{% block body %}
+    <div class="container mt-4">
+        <h1 class="mb-4">Détails de la commande</h1>
+        <div class="card mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Informations de la commande</h5>
+                {# <p>Commandé le : {{ order.getOrderedAt() ? order.getOrderedAt()|date('d-m-Y à H:i') : 'Non spécifiée' }}</p> #}
+
+                <p>Commandé le : {{ order.getOrderedAt() ? order.getOrderedAt().format('d-m-Y à H:i') : 'Non spécifiée' }}</p>
+                <p>Livré à : {{ order.getUser().getPrenom() }} {{ order.getUser().getNom() }}</p>
+                <p>Adresse de livraison : {{ order.getAdresseLivraison() }}</p>
+                <p>Numéro de suivi : {{ order.getNumeroSuivi() }}</p>
+                {# <p>Numéro de suivi : {{ order.getNumeroSuivi() ? order.getNumeroSuivi() : 'Non spécifié' }}</p> #}
+                <p>Notes : {{ order.getNotes() ? order.getNotes() : 'Aucune' }}</p>
+            </div>
+        </div>
+
+        <h2 class="mb-3">Produits commandés</h2>
+        <div class="row">
+            {% set totalCommande = 0 %}
+            {% for detail in order.getOrderDetails() %}
+                {% set totalProduit = detail.getPrix() * detail.getQuantity() %}
+                {% set totalCommande = totalCommande + totalProduit %}
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100">
+                    
+{# {% if detail.getProduct().getImage() %} #}
+    {# <img src="{{ asset('upload/' ~ detail.getProduct().getImage()) }}" class="card-img-top" alt="{{ detail.getProduct().getNom() }}" style="height: 200px; object-fit: cover;"> #}
+{# {% else %} #}
+    <!-- Ajouter une image par défaut ou laisser vide -->
+{# {% endif %} #}
+
+
+
+
+
+
+
+
+
+                        <img src="{{ asset('upload/' ~ detail.getProduct().getImage()) }}" class="card-img-top" alt="{{ detail.getProduct().getNom() }}" style="height: 200px; object-fit: cover;">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ detail.getProduct().getNom() }}</h5>
+                            <p class="card-text">
+                                Quantité : {{ detail.getQuantity() }}<br>
+                                Prix unitaire : {{ detail.getPrix() }} €<br>
+                                Total : {{ totalProduit|number_format(2, ',', ' ') }} €
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <div class="mt-4">
+            <h3>Total de la commande : {{ totalCommande|number_format(2, ',', ' ') }} €</h3>
+        </div>
+    </div>
+{% endblock %}
